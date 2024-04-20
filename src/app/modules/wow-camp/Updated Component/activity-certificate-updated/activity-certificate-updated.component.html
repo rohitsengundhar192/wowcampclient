@@ -1,0 +1,794 @@
+<div class="space-y-4">
+  <div class="respon w-full"></div>
+
+  <div class="text-justify">
+    <span class="primary-heading">Select from the list of</span>
+    <span class="para-red"> Completed Activities</span
+    ><span class="primary-heading">
+      in Camps in order to download the certificate:</span
+    >
+  </div>
+
+  <div>
+    <div class="mat-elevation-z8 mt-2 table-responsive w-fit">
+      <div id="pdfTable">
+        <table
+          id="excel_table"
+          matSort
+          mat-table
+          #table
+          [dataSource]="dataSource"
+          style="margin-left: auto; margin-right: auto"
+          class="component--mat-table__custom-table checklist-table table-bordered table-sm block"
+        >
+          <ng-container matColumnDef="col1">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="
+                width: 100px;
+                max-width: 150px;
+                word-wrap: break-word;
+                white-space: nowrap;
+                padding-left: 8px;
+                padding-right: 8px;
+                vertical-align: middle;
+                text-align: center;
+                border-right: 1px solid #9a9a9a;
+              "
+            >
+              Date
+            </th>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              style="text-align: left; padding-left: 10px"
+            >
+              <mat-radio-button (click)="disabled(element)">
+                <span class="para">
+                  {{ element.trip_datetime | date : "dd MMM y" }}
+                </span>
+              </mat-radio-button>
+            </td>
+          </ng-container>
+
+          <ng-container
+            matColumnDef="col2"
+            style="border-right: 1px solid #9a9a9a"
+          >
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="
+                width: 110px;
+                max-width: 150px;
+                word-wrap: break-word;
+                white-space: nowrap;
+                padding-left: 8px;
+                padding-right: 8px;
+                vertical-align: middle;
+                text-align: center;
+                border-right: 1px solid #9a9a9a;
+              "
+            >
+              Camp Site Name
+            </th>
+            <td
+              style="
+                border-right: 1px solid #9a9a9a;
+                text-align: left;
+                padding-left: 10px;
+              "
+              mat-cell
+              *matCellDef="let element"
+            >
+              <span class="para">
+                {{ element.camp_site_name }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container
+            matColumnDef="col3"
+            style="border-right: 1px solid #9a9a9a"
+          >
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              style="
+                width: 180px;
+                max-width: 200px;
+                word-wrap: break-word;
+                white-space: nowrap;
+                padding-left: 8px;
+                padding-right: 8px;
+                vertical-align: middle;
+                text-align: center;
+                border-right: 1px solid #9a9a9a;
+              "
+            >
+              Activity Name
+            </th>
+            <td
+              style="
+                border-right: 1px solid #9a9a9a;
+                text-align: left;
+                padding-left: 10px;
+              "
+              mat-cell
+              *matCellDef="let element"
+            >
+              <span class="para">{{ element.activity_name }}</span>
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+            style="text-align: center"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="selection.toggle(row); onRowClicked(row)"
+            (mouseover)="row.hovered = true"
+            (mouseout)="row.hovered = false"
+          ></tr>
+
+          <tr class="mat-row" style="text-align: center" *matNoDataRow>
+            <td class="mat-cell" colspan="3">Data not found</td>
+          </tr>
+        </table>
+      </div>
+      <mat-paginator
+        class="component--mat-pagination__size"
+        #paginator
+        #paginatorElement
+        [length]="dataSource?.data?.length"
+        [pageIndex]="0"
+        [pageSizeOptions]="[5, 10, 20]"
+        [pageSize]="5"
+        appAddAllToPaginator
+        [allValue]="dataSource?.data?.length"
+        (page)="pageChanged($event)"
+      >
+      </mat-paginator>
+      <span class="red-heading"> * </span
+      ><span class="para"> Please select All in order to use filter </span>
+      <div class="flex bg-white-black" id="export_btn">
+        <div class="custom-mat-floating-label">
+          <mat-form-field
+            appearance="outline"
+            class="component--mat-form-field__custom-input pl-2"
+          >
+            <input
+              placeholder="Filter"
+              [disabled]="
+                dataSource.data.length === 0 ||
+                !(pageSize !== 5 && pageSize !== 10 && pageSize !== 20)
+              "
+              matInput
+              (keyup)="applyFilter($event)"
+              #input
+            />
+          </mat-form-field>
+        </div>
+        <div class="w-full flex justify-end">
+          <span class="p-5 export-btn" [matMenuTriggerFor]="menu">Export</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="downloadAsPDF()">
+      <mat-icon>picture_as_pdf</mat-icon>
+      <span>Print / Export PDF</span>
+    </button>
+    <button mat-menu-item (click)="exportReport('sample.xlsx')">
+      <mat-icon>grid_on</mat-icon>
+      <span>Export SpreadSheet</span>
+    </button>
+    <button mat-menu-item (click)="exportReport('sample.csv')">
+      <mat-icon>grid_on</mat-icon>
+      <span>Export csv File</span>
+    </button>
+    <button mat-menu-item (click)="exportReport('sample.json')">
+      <mat-icon>grid_on</mat-icon>
+      <span>Export json</span>
+    </button>
+  </mat-menu>
+  <!--Certificate-->
+  <div class="w-full">
+    <div
+      class="mx-auto lt-md:w-[94%] lt-lg:w-[94%] w-[21cm] lg:w-[94%] h-full overflow-x-scroll"
+    >
+      <div class="text_mat">
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-bottom: -32px;
+          "
+        >
+          <p class="secondary-heading">
+            You can download the WOW Camp Certificate by clicking this button.
+          </p>
+        </div>
+
+        <div
+          style="display: flex; flex-direction: row; justify-content: flex-end"
+        >
+          <mat-icon
+            (click)="pdfDownload()"
+            class="cursor-pointer text-black mb-2"
+            >file_download</mat-icon
+          >
+          <mat-icon
+            (click)="do()"
+            class="cursor-pointer text-black mb-2"
+            style="margin-right: 5px"
+            >share</mat-icon
+          >
+        </div>
+      </div>
+
+      <div class="mat">
+        <div
+          class="mat"
+          #content
+          id="certificate"
+          style="background-color: #a8f942"
+        >
+          <div class="p-3">
+            <div class="flex pb-3">
+              <!--left-->
+              <div class="flex space-x-2">
+                <div>
+                  <!-- <img
+                    style="border-radius: 8px"
+                    class="h-16 w-16"
+                    [src]="
+                      'https://cephapi.getwow.biz/api/storage/' +
+                      country_code +
+                      '-' +
+                      customer_id +
+                      '/' +
+                      customer_sub_domain_name +
+                      '-icon-128x128.png'
+                    "
+                    alt="app-logo"
+                  /> -->
+                </div>
+                <div class="flex flex-col">
+                  <span class="primary-heading">Institution Name:</span>
+                  <span class="normal-heading text-xl uppercase_1">{{
+                    inst_name
+                  }}</span>
+
+                  <span class="para-bold"
+                    >Address: {{ inst_add1 }}, {{ inst_add2 }}, {{ inst_city }},
+                    {{ inst_state }}, {{ inst_pin }}</span
+                  >
+                </div>
+              </div>
+
+              <!--right-->
+              <div
+                class="items-center justify-center ml-[170px]"
+                style="text-align: center"
+              >
+                <div class="flex">
+                  <span class="">
+                    <span class="secondary-heading text-xl">www.</span>
+                    <span class="primary-heading text-xl">get</span>
+                    <span class="red-heading text-xl">wow.</span>
+                    <span class="primary-heading text-xl">education</span>
+                  </span>
+                </div>
+                <span class="">
+                  <span class="red-heading text-xl">W</span>
+                  <span class="para-bold text-xl">ell-being </span>
+                  <span class="red-heading text-xl">O</span>
+                  <span class="para-bold text-xl">f </span>
+                  <span class="red-heading text-xl">W</span>
+                  <span class="para-bold text-xl">aste </span>
+                </span>
+              </div>
+            </div>
+
+            <div border_bottom class="h-1 bg-[#9A9A9A]"></div>
+
+            <div class="pb-3 pt-3 flex space-x-2">
+              <!--First-->
+              <div class="">
+                <div class="scanner-container"></div>
+
+                <div
+                  style="
+                    height: 100px;
+                    width: 100px;
+                    margin-top: 11px;
+                    margin-right: 4px;
+                  "
+                  *ngIf="cardUrl"
+                >
+                  <qrcode
+                    [qrdata]="cardUrl"
+                    [width]="100"
+                    [errorCorrectionLevel]="'Q'"
+                    [margin]="1"
+                  >
+                  </qrcode>
+                </div>
+              </div>
+              <!--Second-->
+              <div class="w-[50%] text">
+                <span class="whitespace-nowrap"
+                  >WOW Camp - Activity Completion Certificate</span
+                >
+                <div class="flex space-x-2">
+                  <span class="primary-heading mt-2">Participant Name:</span>
+                  <span
+                    class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                  >
+                    {{ names?.first_name || direct_stu_login_fn | titlecase }}
+                    {{
+                      names?.last_name || direct_stu_login_ln | titlecase
+                    }}</span
+                  >
+                </div>
+                <div class="flex space-x-2">
+                  <span class="primary-heading mt-2">Date of Birth:</span>
+                  <span
+                    class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                    style="margin-left: 36px"
+                    >{{ names?.date_of_birth | date : "dd MMM y" }}</span
+                  >
+                </div>
+                <div class="flex space-x-2">
+                  <span class="primary-heading mt-2">WOW Camp Name:</span>
+                  <span
+                    class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                    style="margin-left: 5px"
+                  >
+                    {{ camp_site }} {{ names?.camp_site_name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div border_bottom class="h-1 bg-[#9A9A9A]"></div>
+            <div *ngIf="showdatatopchange">
+              <ng-container *ngIf="array.length > 0 && showdata">
+                <mat-label color="warn" *ngFor="let item of array">
+                  <div class="flex space-x-2">
+                    <span class="primary-heading mt-2"
+                      >Date of Participation:</span
+                    >
+                    <span
+                      class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                    >
+                      {{ booking_date | date : "dd MMM y" }}
+                    </span>
+                  </div>
+
+                  <div class="flex space-x-2">
+                    <span class="primary-heading mt-2">Activity Name:</span>
+                    <span
+                      class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                      style="margin-left: 43px"
+                    >
+                      {{ item }}
+                    </span>
+                  </div>
+                  <br />
+
+                  <div border_bottom class="h-1 bg-[#9A9A9A]"></div>
+                </mat-label>
+              </ng-container>
+            </div>
+
+            <div>
+              <div
+                class="w-[98%] flex-row h-auto para mt-1 bg-white text-justify normal-heading p-2 space-y-5"
+                style="border-radius: 10px"
+              >
+                <p
+                  style="
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 12px;
+                  "
+                  [innerHTML]="content_data"
+                ></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Another certificate for download-->
+<div class="mat-data">
+  <div class="mat">
+    <div
+      class="mat"
+      #content1
+      id="certificate"
+      style="background-color: #a8f942"
+    >
+      <div class="p-3">
+        <div class="flex pb-3">
+          <!--left-->
+          <div class="flex space-x-2">
+            <div>
+              <img
+                style="border-radius: 8px"
+                class="h-16 w-16"
+                [src]="
+                  'https://cephapi.getwow.biz/api/storage/' +
+                  country_code +
+                  '-' +
+                  customer_id +
+                  '/' +
+                  customer_sub_domain_name +
+                  '-icon-128x128.png'
+                "
+                alt="app-logo"
+              />
+            </div>
+            <div class="flex flex-col">
+              <span
+                style="
+                  color: #3366ff;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 15px;
+                "
+                >Institution Name:</span
+              >
+              <span
+                class="uppercase_1"
+                style="
+                  color: #000;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 18px;
+                  font-weight: 700;
+                "
+                >{{ inst_name }}</span
+              >
+
+              <span
+                class="text-xs text-justify"
+                style="
+                  color: #000;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 12px;
+                "
+                >Address: {{ inst_add1 }}, {{ inst_add2 }}, {{ inst_city }},
+              </span>
+              <span
+                class="text-xs text-justify"
+                style="
+                  color: #000;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 12px;
+                "
+              >
+                {{ inst_state }}, {{ inst_pin }}
+              </span>
+            </div>
+          </div>
+
+          <!--right-->
+          <div
+            class="items-center justify-center ml-[70px]"
+            style="text-align: center"
+          >
+            <div class="flex">
+              <span class="">
+                <span
+                  style="
+                    color: #969696;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >www.</span
+                >
+                <span
+                  style="
+                    color: #3366ff;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >get</span
+                >
+                <span
+                  style="
+                    color: #f60707;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >wow.</span
+                >
+                <span
+                  style="
+                    color: #3366ff;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >education</span
+                >
+              </span>
+            </div>
+            <div class="flex">
+              <span class="">
+                <span
+                  style="
+                    color: #f60707;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >W</span
+                >
+                <span
+                  style="
+                    color: #000;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >ell-being
+                </span>
+
+                <span
+                  style="
+                    color: #f60707;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >O</span
+                >
+                <span
+                  style="
+                    color: #000;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >f
+                </span>
+                <span
+                  style="
+                    color: #f60707;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >W</span
+                >
+                <span
+                  style="
+                    color: #000;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 15px;
+                    font-weight: 600;
+                  "
+                  >aste
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div border_bottom class="h-1 bg-[#9A9A9A] w-[563px]"></div>
+
+        <div class="pb-3 pt-3 flex space-x-2">
+          <!--First-->
+          <div class="">
+            <div class="scanner-container"></div>
+
+            <div
+              style="
+                height: 100px;
+                width: 100px;
+                margin-top: 11px;
+                margin-right: 4px;
+              "
+              *ngIf="cardUrl"
+            >
+              <qrcode
+                [qrdata]="cardUrl"
+                [width]="100"
+                [errorCorrectionLevel]="'Q'"
+                [margin]="1"
+              >
+              </qrcode>
+            </div>
+          </div>
+          <!--Second-->
+          <div class="w-[50%] text">
+            <span
+              class="whitespace-nowrap"
+              style="
+                color: #000;
+                text-align: justify;
+                text-justify: inter-word;
+                font-size: 18px;
+                font-weight: 700;
+              "
+              >WOW Camp - Activity Completion Certificate</span
+            >
+            <div class="flex space-x-2">
+              <span
+                class="mt-2"
+                style="
+                  color: #3366ff;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 12px;
+                  font-weight: 700;
+                "
+                >Participant Name:</span
+              >
+              <span
+                class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center"
+                style="
+                  color: #000;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 13px;
+                "
+              >
+                {{ names?.first_name || direct_stu_login_fn | titlecase }}
+                {{ names?.last_name || direct_stu_login_ln | titlecase }}</span
+              >
+            </div>
+            <div class="flex space-x-2">
+              <span
+                class="mt-2"
+                style="
+                  color: #3366ff;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 12px;
+                  font-weight: 700;
+                "
+                >Date of Birth:</span
+              >
+              <span
+                class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center"
+                style="
+                  color: #000;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 13px;
+                  margin-left: 36px;
+                "
+                >{{ names?.date_of_birth | date : "dd MMM y" }}</span
+              >
+            </div>
+            <div class="flex space-x-2">
+              <span
+                class="mt-2"
+                style="
+                  color: #3366ff;
+                  text-align: justify;
+                  text-justify: inter-word;
+                  font-size: 12px;
+                  font-weight: 700;
+                "
+                >WOW Camp Name:</span
+              >
+              <span
+                class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center normal-heading"
+                style="margin-left: 5px"
+              >
+                {{ camp_site }} {{ names?.camp_site_name }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div border_bottom class="h-1 bg-[#9A9A9A] w-[563px]"></div>
+        <div *ngIf="showdatatopchange">
+          <ng-container *ngIf="array.length > 0 && showdata">
+            <mat-label color="warn" *ngFor="let item of array">
+              <div class="flex space-x-2">
+                <span
+                  class="mt-2"
+                  style="
+                    color: #3366ff;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 13px;
+                  "
+                  >Date of Participation:</span
+                >
+                <span
+                  class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center"
+                  style="
+                    color: #000;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 13px;
+                    margin-left: 36px;
+                  "
+                >
+                  {{ booking_date | date : "dd MMM y" }}
+                </span>
+              </div>
+
+              <div class="flex space-x-2">
+                <span
+                  class="mt-2"
+                  style="
+                    color: #3366ff;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 13px;
+                  "
+                  >Activity Name:</span
+                >
+                <span
+                  class="flex h-7 w-36 mt-1 bg-white text-center items-center justify-center"
+                  style="
+                    color: #000;
+                    text-align: justify;
+                    text-justify: inter-word;
+                    font-size: 13px;
+                    margin-left: 43px;
+                  "
+                >
+                  {{ item }}
+                </span>
+              </div>
+              <br />
+
+              <div border_bottom class="h-1 bg-[#9A9A9A] w-[563px]"></div>
+            </mat-label>
+          </ng-container>
+        </div>
+
+        <div
+          class="pb-3 mt-[20px] bg-white pt-3 w-[563px]"
+          style="border-radius: 10px"
+        >
+          <p
+            style="
+              text-align: justify;
+              text-justify: inter-word;
+              font-size: 8px;
+              width: 551px;
+              margin-left: 5px;
+            "
+            [innerHTML]="content_data"
+          ></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

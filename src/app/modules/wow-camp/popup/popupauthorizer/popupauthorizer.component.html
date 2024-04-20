@@ -1,0 +1,117 @@
+<div class="space-y-1">
+  <div class="space-y-5">
+    <mat-toolbar class="component--dialog-box__custom-toolbar">
+      <span class="font-small-in-size">Add/Edit Authorizer</span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="flex items-center justify-center">
+        <mat-icon (click)="onNoClick()">close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="p-[5%]">
+      <form [formGroup]="firstFormGroup">
+        <div class="flex flex-col re">
+          <mat-form-field
+            appearance="outline"
+            class="w-1/2 component--mat-form-field__custom-input"
+          >
+            <mat-label class="">Select User Category</mat-label>
+            <mat-select
+              appearance="outline"
+              formControlName="categoryforms"
+              required
+              [(value)]="user_category_id"
+            >
+              <mat-option
+                *ngFor="let dates of s"
+                (click)="select(dates)"
+                [value]="dates"
+              >
+                {{ dates.user_category_name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>User Category is required</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="ml-[17%] gt-xs:ml-[35%] gt-md:ml-[35%]">
+    <button
+      mat-raised-button
+      class="primary-button w-44 h-7"
+      (click)="add_authorizer()"
+    >
+      Add Selected Users
+    </button>
+  </div>
+  <div class="_container">
+    <div class="content">
+      <div class="">
+        <div
+          class="content-body"
+          fxLayoutGap="5px"
+          fxLayout="column"
+          [formGroup]="firstFormGroup"
+        >
+          <div class="contact-area">
+            <div class="search">
+              <div class="pt-2">
+                <mat-form-field
+                  appearance="outline"
+                  class="w-full component--mat-form-field__custom-input"
+                >
+                  <mat-label>Search User </mat-label>
+                  <input
+                    matInput
+                    placeholder=""
+                    [autocomplete]="'off'"
+                    [(ngModel)]="searchText"
+                    [ngModelOptions]="{ standalone: true }"
+                  />
+                  <mat-icon matSuffix class="text-primary">search</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="contact-list">
+              <ng-container *ngFor="let item of contact_list |filter: searchText">
+                <div
+                  style="margin: 5px 5px 5px 0px"
+                  class="profile cursor-pointer flex"
+                  fxLayout="row wrap"
+                  fxLayoutAlign="start center"
+                  (click)="
+                    checkbox.checked = !checkbox.checked; check_add_user(item)
+                  "
+                >
+                <img
+                [src]=" getCustomerProfileUrl(item?.customer_image)"
+                  alt=""
+                  class="h-12 w-12 mt-1 mr-1 mb-1"
+                  (click)="openUserProfile()"
+                  (click)="isrowselectedfirstreply(item)"
+                />
+                  <div class="space-y-2">
+                    <div>
+                      <span class="primary-heading">{{ item.first_name }} </span>
+                      <span class="primary-heading">{{ item.last_name }}</span>
+                    </div>
+                    <div class="secondary-heading">{{ item.category }}</div>
+                  </div>
+
+                  <span style="flex: 1 1 auto"></span>
+
+                  <mat-radio-button
+                    #checkbox
+
+                    class="mr-[10px] mt-4"
+                    (click)="$event.preventDefault()"
+                  ></mat-radio-button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

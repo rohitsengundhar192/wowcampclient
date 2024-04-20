@@ -1,0 +1,17 @@
+<ng-container *ngIf="!hidecontent">
+  <div class="component--mat-tab__custom-style">
+    <mat-tab-group dynamicHeight>
+      <mat-tab label="Book WOW Ticket">
+        <app-book-entry-tickets-updated></app-book-entry-tickets-updated>
+      </mat-tab>
+      <mat-tab label="Book Volunteer Ticket">
+        <app-book-vol-ticket></app-book-vol-ticket>
+      </mat-tab>
+      <mat-tab label="Review Booked Tickets">
+        <div class="space-y-2">
+          <app-review-book-tickets-updated></app-review-book-tickets-updated>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</ng-container>

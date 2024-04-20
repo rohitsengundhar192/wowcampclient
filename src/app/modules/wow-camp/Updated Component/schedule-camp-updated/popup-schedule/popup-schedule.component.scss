@@ -1,0 +1,39 @@
+.bgc {
+  background-color: #3366ff;
+}
+.mat-form-field-wrapper {
+  padding-bottom: -0.65625em;
+}
+@import "global";
+
+.component--dialog-box__custom-toolbar {
+  &.mat-toolbar {
+    height: 27px;
+    background-color: #3366ff;
+    padding: 0 0 0 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 550;
+    .example-spacer {
+      flex: 1 1 auto;
+    }
+  }
+}
+
+button.red-custom-date-class {
+  background: #a6db07;
+  border-radius: 100%;
+}
+
+.hide {
+  opacity: 0;
+}
+
+button.rose-custom-date-class {
+  background: #fff;
+  border-radius: 100%;
+}
+
+.bg_filter {
+  background-color: rgb(239, 241, 117);
+}

@@ -1,0 +1,43 @@
+mat-form-field {
+  @apply w-full gt-md:w-[70%];
+}
+
+.left {
+  @apply w-full;
+}
+
+.right {
+  @apply w-full;
+}
+
+.example-container mat-form-field + mat-form-field {
+  margin-left: 8px;
+}
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+
+@import "global";
+@import "variables";
+.content {
+  text-align: center;
+  .line1 {
+    @include heading($secondary-color, $small-font-weight, $medium-font-size);
+  }
+  .line2 {
+    @include heading($primary-color, $small-font-weight, $medium-font-size);
+  }
+  .line3 {
+    @include heading($secondary-color, $small-font-weight, $small-font-size);
+  }
+}

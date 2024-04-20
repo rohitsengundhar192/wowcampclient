@@ -1,0 +1,22 @@
+.component--dialog-box__custom-toolbar {
+  &.mat-toolbar {
+    height: 27px;
+    background-color: #3366ff;
+    padding: 0 0 0 0px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 550;
+
+    .example-spacer {
+      flex: 1 1 auto;
+    }
+  }
+}
+
+.mat-dialog-content {
+  display: block;
+  margin: 0 0;
+  margin-top: -10px;
+  padding: 10px 10px;
+  max-height: 60vh;
+}

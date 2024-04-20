@@ -1,0 +1,52 @@
+<div>
+  <mat-toolbar class="component--dialog-box__custom-toolbar">
+    <span class="font-small-in-size">WOW Waste Collection Guidelines</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="flex items-center justify-center">
+      <mat-icon (click)="onNoClick()">close</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>
+
+<div>
+  <div class="text-justify ml-2">
+    <span class="para">Guidelines on what is acceptable as</span>
+    <span class="para-red ml-[3px]">WOW Waste</span> <span class="para">?</span>
+  </div>
+
+  <div class="text-justify ml-2">
+    <span class="para-red"
+      >Please watch this video and show this to all contributors of WOW Program
+      in order to avoid rejections from the GETster Coordinator during
+      inspection before loading.</span
+    >
+  </div>
+
+  <!--video -->
+  <div class="p-2">
+    <div class="space-y-2">
+      <section class="overflow-y-auto">
+        <div class="w-full grid cols-2  gap-y-4 gap-x-2">
+          <div *ngIf="showimage">
+            <img
+              src="../../../../assets/images/poster.jpg"
+              class="w-full gt-xs:w-[96%] gt-xs: h-[50%]"
+            />
+          </div>
+          <div *ngIf="showvideo">
+            <app-video-player
+              [videoSource]="video_variable"
+              [isShowControls]="true"
+              #videoPlayer
+              [isAutoPlay]="true"
+              [posterSource]="
+                'https://www.ionos.com/digitalguide/fileadmin/DigitalGuide/Teaser/webm.jpg'
+              "
+            >
+            </app-video-player>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,96 @@
+.img-responsive {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  background: #f8f9fb;
+  border: 1px solid #989494;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+// Leaflet Map
+@import "~leaflet/dist/leaflet.css";
+.map-container {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  margin: 2px;
+  height: 270px;
+  border: 2px solid black;
+}
+
+.map-frame {
+  border: 2px solid black;
+  height: 270px;
+}
+
+#map {
+  height: 270px;
+}
+
+
+.left {
+  @apply w-full;
+}
+
+.right {
+  @apply w-full;
+}
+
+@import "global";
+
+.example-action-buttons {
+  padding-bottom: 20px;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
+
+
+.video-player {
+  width: 100%; /* Make the video player take up 100% of its container */
+  max-width: 500px; /* Set a maximum width for the video player */
+  height: auto; /* Allow the height to adjust proportionally with the width */
+}
+
+/* Media query for larger screens (adjust the values as needed) */
+@media (min-width: 768px) {
+  .video-player {
+    max-width: 700px;
+  }
+}
+
+/* Media query for even larger screens (adjust the values as needed) */
+@media (min-width: 1024px) {
+  .video-player {
+    max-width: 600px;
+
+    // max-width: 900px;
+    // max-height: 300px;
+  }
+}
+
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 8px; /* Adjust as needed */
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #333; /* Adjust arrow color */
+  transform: translateY(-50%);
+  pointer-events: none;
+  cursor: pointer;
+}

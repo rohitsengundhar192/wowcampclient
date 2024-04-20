@@ -1,0 +1,111 @@
+<div class="space-y-5">
+  <mat-toolbar class="component--dialog-box__custom-toolbar">
+    <span class="font-small-in-size">Select Available Date</span>
+    <span class="example-spacer"></span>
+    <button mat-icon-button class="flex items-center justify-center">
+      <mat-icon (click)="onNoClick()">close</mat-icon>
+    </button>
+  </mat-toolbar>
+</div>
+
+<div class="p-2">
+  <!--Calander-->
+  <div class="mt-[7px]">
+    <div class="flex xs:flex-col xs:w-full">
+      <div class="w-full">
+        <form autocomplete="off" [formGroup]="firstFormGroup">
+          <div>
+            <mat-form-field
+              appearance="outline"
+              class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading"
+            >
+              <mat-label>Choose a date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                (dateInput)="OnDateChange($event.value)"
+                formControlName="calender"
+                (dateChange)="onSelect($event)"
+                [min]="minDate"
+                readonly
+                [matDatepickerFilter]="isDateDisabled"
+                [matDatepicker]="releasedAtPicker"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker
+                [dateClass]="dateClass"
+                #picker
+                ngDefaultControl
+              ></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+
+      <div class="w-full xs:mt-3">
+        <div class="space-y-2">
+          <div class="flex items-center space-x-2">
+            <div>
+              <mat-card class="bg-white card"></mat-card>
+            </div>
+            <div>
+              <span class="para">AVAILABLE</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <div>
+              <mat-card class="bg-rose-200 card"></mat-card>
+            </div>
+            <div>
+              <span class="para">Fully Booked</span>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <div>
+              <mat-card class="bg-slate-200 card"></mat-card>
+            </div>
+            <div>
+              <span class="para">Not Available</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <span class="para-bold">No of camping slots Available on</span>
+          </div>
+          <div>
+            <span class="para-bold">
+              {{ this.display_date | date : "d MMM y" }} at camp</span
+            >
+            <span class="hide">n</span>
+            <span class="para-red">{{ this.place }}</span>
+          </div>
+          <div>
+            <span class="primary-heading">
+              {{ this.morning_tent }}- camping slots
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Button-->
+  <div>
+    <form [formGroup]="firstFormGroup">
+      <button
+        type="submit"
+        mat-raised-button
+        class="primary-button"[disabled]="popupbtndisable"
+        (click)="scheduletripButtonUpdate()"
+      >
+        Select New Date
+      </button>
+    </form>
+  </div>
+</div>

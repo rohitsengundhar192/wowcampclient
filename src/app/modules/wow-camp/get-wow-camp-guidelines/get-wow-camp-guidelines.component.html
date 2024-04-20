@@ -1,0 +1,149 @@
+<div class="space-y-2 text-justify">
+  <!--simple text-->
+  <div class="mb-[3px] text-justify">
+    <span class="primary-heading"
+      >Out of Classroom Leadership / Team Building Camp</span
+    >
+  </div>
+  <!--country camp-->
+  <div class="mt-2">
+    <div class="flex xs:flex-col xs:w-full">
+      <div class="w-full">
+        <form
+          #ngForm="ngForm"
+          [formGroup]="firstFormGroup"
+          (ngSubmit)="onAddressFormSubmit(firstFormGroup)"
+        >
+          <div class="w-full">
+            <div>
+              <mat-form-field
+                class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading select-wrapper"
+                appearance="outline"
+              >
+                <mat-label>Select Country</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  #val
+                  formControlName="country"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  [displayWith]="displayCountry"
+                >
+                  <mat-option
+                    *ngFor="let option of CountryfilteredOptions | async"
+                    [value]="option"
+                    (onSelectionChange)="resetAndSelectCountry(option)"
+                  >
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error>Please Select a country</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="w-full xs:mt-3">
+        <form [formGroup]="firstFormGroup" (click)="checkcountry()">
+          <mat-form-field
+            appearance="outline"
+            class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading"
+          >
+            <mat-label class="">WOW Camp site</mat-label>
+            <mat-select formControlName="city" class="para-bold" required>
+              <mat-option
+                *ngFor="let city of city_1"
+                class="para-bold"
+                [value]="city.camp_id"
+                (click)="
+                  video = null; showvideo = null; getNearestlocation(city)
+                "
+              >
+                {{ city.camp_site_name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>Camp site is required</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--end country camp-->
+  <div class="space-y-2">
+    <section class="overflow-y-auto">
+      <div class="grid grid-cols-2 lt-xl:grid-cols-1 gap-y-4 gap-x-2">
+        <div *ngIf="showimage">
+          <img
+            src="../../../../assets/images/poster.jpg"
+            class="w-full gt-xs:w-[96%]"
+          />
+        </div>
+        <div *ngIf="showvideo">
+          <app-video-player
+            [videoSource]="video_variable"
+            [isShowControls]="true"
+            #videoPlayer
+            [posterSource]="
+              'https://www.ionos.com/digitalguide/fileadmin/DigitalGuide/Teaser/webm.jpg'
+            "
+            [isAutoPlay]="true"
+          >
+          </app-video-player>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="space-y-2 gt-md:mt-1">
+    <!--first para-->
+    <div class="text-justify">
+      <span class="ml-10 para">
+        A typical student generates 10 to 15 kg of waste paper in a year. An
+        average household generates about 30 kg of waste papers, used clothes
+        and recyclable plastics (collectively referred to as
+        <span
+          class="underline underline-offset-4 primary-heading cursor-pointer"
+          (click)="openWOWwasteVideo()"
+          >WOW Waste</span
+        >
+        ) per year.
+      </span>
+    </div>
+    <!--Sec Para-->
+    <div class="space-y-0 text-justify">
+      <span class="ml-10 para">
+        Unlike traditional classrooms, the natural environment of an outdoor
+        educational camp can improve physical fitness, mental well-being, and
+        foster creativity, critical thinking, and provide a break from the
+        distractions of technology and daily life for students. Outdoor
+        leadership camps provide students with opportunities to develop
+        important life skills such as teamwork, communication, problem-solving,
+        and decision-making. Through the WOW (Well Being of Waste) Program,
+        participating institutions can engage their students in certified
+        out-of-classroom learning experiences by utilizing any of the natural
+        scenic educational camps in the country that are adjacent to forests,
+        rivers, lakes, or oceans and are accessible from a highway. There will
+        be several WOW Volunteer-led team-building, leadership, outdoor, fun,
+        and educational activities for the students to participate in and learn
+        from. Typically, if a student is able to collect over 10 kgs of
+        <span
+          class="underline underline-offset-4 primary-heading cursor-pointer"
+          (click)="openWOWwasteVideo()"
+          >WOW Waste</span
+        >, he or she is eligible for 1 no. of WOW Camp Entry Ticket.
+      </span>
+    </div>
+    <!--Third para-->
+    <div class="space-y-0 text-justify">
+      <span class="ml-10 para">
+        WOW, Volunteer - An authorized adult staff employed by the educational
+        institution should accompany every 10 students to monitor their
+        activities and the safety of the students throughout their camp trip and
+        the entry for such personnel is free to the camp.
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,218 @@
+<div class="p-1 space-y-1">
+  <div class="space-y-2">
+    <div>
+      <span class="para-red"
+        >Select from the following campsites near you:</span
+      >
+    </div>
+    <div>
+      <div class="flex xs:flex-col xs:w-full">
+        <!-- <div class="w-full">
+          <form
+            #ngForm="ngForm"
+            [formGroup]="firstFormGroup"
+            (ngSubmit)="onAddressFormSubmit(firstFormGroup)"
+          >
+            <mat-form-field
+              appearance="outline"
+              class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading"
+            >
+              <mat-label>Select Country</mat-label>
+              <input
+                type="text"
+                matInput
+                formControlName="country"
+                [matAutocomplete]="auto"
+              />
+
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option
+                *ngFor="let option of CountryfilteredOptions | async"
+                [value]="option"
+                (onSelectionChange)="resetAndSelectCountry(option)"
+                  (click)="
+                    video = null;
+                    acvideo = null;
+                    acname = null;
+                    data_activity = null;
+                    setView();
+                    timeStampDetails = [];
+                    initialMarkers = null
+                  "
+                >
+                  {{ option.name }}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error
+                *ngIf="this.firstFormGroup.get('country').hasError('required')"
+                >Please select a country.
+              </mat-error>
+            </mat-form-field>
+          </form>
+        </div> -->
+
+        <div class="w-full">
+          <form
+            #ngForm="ngForm"
+            [formGroup]="firstFormGroup"
+            (ngSubmit)="onAddressFormSubmit(firstFormGroup)"
+          >
+            <div class="w-full">
+              <mat-form-field
+                class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading select-wrapper"
+                appearance="outline"
+              >
+                <mat-label>Select Country</mat-label>
+                <input
+                  type="text"
+                  matInput
+                  #val
+                  formControlName="country"
+                  [matAutocomplete]="auto"
+                />
+                <mat-autocomplete
+                  #auto="matAutocomplete"
+                  [displayWith]="displayCountry"
+                >
+                  <mat-option
+                    *ngFor="let option of CountryfilteredOptions | async"
+                    [value]="option"
+                    (onSelectionChange)="getCountryData(option)"
+                    (click)="
+                      video = null;
+                      acvideo = null;
+                      acname = null;
+                      data_activity = null;
+                      setView();
+                      lastSelectedCountry = null;
+                      timeStampDetails = [];
+                      initialMarkers = null
+                    "
+                  >
+                    {{ option.name }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error>Please Select a country</mat-error>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+
+        <div class="w-full xs:mt-3">
+          <form [formGroup]="firstFormGroup" (click)="checkcountry()">
+            <mat-form-field
+              appearance="outline"
+              class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading"
+            >
+              <mat-label class="">WOW Camp site</mat-label>
+              <mat-select formControlName="city" class="para-bold" required>
+                <mat-option
+                  *ngFor="let city of city_1"
+                  class="para-bold"
+                  [value]="city.camp_id"
+                  (click)="
+                    video = null;
+                    acvideo = null;
+                    acname = null;
+                    data_activity = null;
+                    setView();
+                    timeStampDetails = [];
+                    getNearestlocation(city)
+                  "
+                >
+                  {{ city.camp_site_name }}
+                </mat-option>
+              </mat-select>
+              <mat-error>Camp site is required</mat-error>
+            </mat-form-field>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 13px">
+    <div
+      class="map-container"
+      leaflet
+      [leafletOptions]="options"
+      (leafletMapReady)="onMapReady($event)"
+      (leafletClick)="mapClicked($event)"
+    ></div>
+  </div>
+
+  <div style="margin-top: 290px" class="space-y-2">
+    <div>
+      <span class="primary-heading">Camp:</span>
+      <span class="ml-[3px] para-bold">{{ place }}</span>
+    </div>
+    <div class="mt-1">
+      <div *ngFor="let item of imagedata; let i = index">
+        <video
+          loop
+          autoplay
+          controls
+          style="cursor: pointer;"
+          class="video-player"
+        >
+          <source [src]="item.images" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+    
+  </div>
+
+  <!--simple line before select activity-->
+  <div class="text-justify mt-[-5px]">
+    <span class="para-red mt-[-5px]"
+      >Select from the Activities available for the above camp.</span
+    >
+  </div>
+  <div class="space-y-4" style="margin-top: 10px">
+    <div></div>
+
+    <div>
+      <form [formGroup]="firstFormGroup" (click)="checkkk()">
+        <div class="flex flex-col re">
+          <mat-form-field
+            appearance="outline"
+            class="w-[95%] xs:w-full component--mat-form-field__custom-input component--mat-country_input__custom-style normal-text-heading gt-xs:w-[48%]"
+          >
+            <mat-label class=""
+              >Select from the Activities available for the above
+              camp.</mat-label
+            >
+            <mat-select formControlName="activity1" class="para-bold" required>
+              <mat-option
+                *ngFor="let activity of data_activity"
+                class="para-bold"
+                [value]="activity.activity_id"
+                (click)="acvideo = null; acname = null; activityvideo(activity)"
+              >
+                {{ activity.activity_name }}
+              </mat-option>
+            </mat-select>
+            <mat-error>Activity name is required</mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!--Video after activity select-->
+  <div class="mt-[15px]">
+    <div *ngFor="let item of imagedataactivity; let i = index">
+      <video
+        loop
+        autoplay
+        controls
+        [muted]="true"
+        style="cursor: pointer"
+        class="video-player"
+      >
+        <source [src]="item.images" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</div>
