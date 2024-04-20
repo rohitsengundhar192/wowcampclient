@@ -185,3 +185,4 @@ html
 - (keypress)="is_integer($event)" - is_integer(value: any) { if (value.key ==
 '0' && !this.inputFileld.nativeElement.value) { value.preventDefault(); } }
 "# wowcampclient" 
+"# wowcamp" 
